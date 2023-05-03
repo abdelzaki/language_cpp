@@ -1,0 +1,7 @@
+- type and defination:
+	- 
+
+- auto:
+	- always use auto, but do not use auto with initializer list 
+	- auto i = 42 -> i is an integer 
+	- auto v = {1, 2} -> v is initializer integer list 
