@@ -458,7 +458,8 @@
 		- using Iterator = std::vector<std::string>::iterator;
 
 - asio:
-	- it is synchronous library
+	- 
+	- it is asynchronous library meaning the function return immedately but the result we get it later 
 	- it works with buffer which is address and size
 
 	- the application provide the memory and the handler thead
