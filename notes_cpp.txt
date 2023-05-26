@@ -1,7 +1,501 @@
-- type and defination:
-	- 
+
+- notes:
+	- c++ cannot return array from function, we can only return pointer from function
+
+- string:
+	- cstyle string function:
+		- strlen: would return the number of the character in the string 
+		- sizeof would return the size of pointer if the data is stored as char*, or would return the number of character which is stored in this variavle including the "\0"
+		- char *var : this is a constant pointer we cannot modify the string as it is stored as const char* ptr 
+		- char var[] : we can modify the data
+
+	- raw string literal:
+		- this would allow you to write the string in more than one line 
+		- R"(  any thing can be written here )";
+	- if u want to write the string as string use ""s and include namespace using namespace std::string_literals this way you can assign this value to auto var and it would be considered as std::string 
+
+	- changing between string and numbers:
+		- to change anything to string:
+			- std::to_string -> would change the number to string 
+		- to change number to string:
+			- std::stoi(string, pointer which get the size of the string which were given, formation of string binary, hex, etc) 
+			-note:
+				- from string to integer. This function might throw an exception if the value of the string cannot be converted to an integer
+
+	- ostringstream:
+		- u can buffer the element in this string and at the end print it use .str() to convert it to string
 
 - auto:
 	- always use auto, but do not use auto with initializer list 
 	- auto i = 42 -> i is an integer 
 	- auto v = {1, 2} -> v is initializer integer list 
+	- auto does not decide if it is reference or constant or anything if u want to declare the variable as reference you have to do it your self like auto& x
+	- there is a different between declttype and auto which i need to understand 
+
+- Lvalue and rvalue:
+	- lvalue reference is something like constant pointer 
+	- we cannot bind lvalue reference to a temp variable. we can only bind rvalues to temp object
+	- ex:
+		- void foo(X&); -> call only lvalue
+		- void foo(const X&); -> call rvalue and lvalue
+		- void foo(X&&); -> only rvalue
+		- if we have a class which has a refernce data member we must be initialize it in the constructor
+
+	- std::movie:
+		- it is declared in <utility>
+		- it convert the type of the lvalue to rValue reference
+
+- initializer list:
+	- initializer list always take precedence if the function is overloaded with 2 options and one of them is initializer list and you are passing initializer list to it.
+	- if u want to use auto and initializer list use the folowing syntax 
+		- auto x = {2} -> this would declare it as initializer list 
+		- auto x {2} -> this would declare it as initiger 
+	- std::initializer_list<int or char, etc> -> it is used to tell the function that u are getting {---},
+
+- constant and constexpr:
+	- constant:
+		- means i promise i wont change it
+
+	- constexpr:
+		- means calculate at compile time 
+
+- callable object:
+	- std::function:
+		- if u want to create function pointer use std::function: std::function<void(int, int)>  Function1 which is defined in the header file <functional>
+
+	- lambad:
+		- you can use it to define a function which we do not need to give it a name 
+
+- class:
+	- copy ctor:
+		- it is called every time we pass object to a function
+		- if we pass object to the constructor then the copy constructor would be called
+		ex:
+			className obj2 = obj1  or className obj2{obj1} -> in both cases the copy constructor is called
+
+	- assign operator:
+		- if u assign object to another object
+		ex:
+			ClassName obj2;
+			obj2 = obj1;   -> here it is assign operator is called
+
+	- virtual:
+		- it allows calling derived method from poiner of type base which points to derived method
+		- if u override method u also hide the method of the base with the same name and different parameter
+	- inheritate constructor:
+		- if u want to inheriate constructor -> use Base::Base
+
+
+- class relationship:
+	- aggregation: means the class has a pointer of another class
+	- composition: means the class has an instance of another class 
+		- both aggregation and composition represent a has relationship. aggregation can have it. compositon muss have it
+
+	- inheritance:
+		- it answer the question is something 
+		- public inheritance: everything remain the same, private is not accessible
+		- protected: public and protected become protected, private is not accessible
+		- private: public and protected become private, private is not accessible
+
+	- polymoherism:
+		- means base class pointer can point to subclass method 
+
+
+
+- cast:
+	- static_cast:
+		- c type cast 
+
+	- dynamic_cast:
+		- perform check when you cast 
+		- it is performed on pointer or reference 
+
+- smart pointer:
+	- unique pointer:
+		- it is a smart pointer which cannot be copied.
+		- it has exclusive ownership
+		- to create unique pointer: auto uniq = std::make_unique<class>()
+		- if u have unique pointer as member variable implement copy constructor and move constructor to enable passing the object. 
+
+	- method on unique pointer:
+		- get: would return the raw pointer, in this case both the unique pointer and the raw pointer points to the object
+		- release: return the raw pointer. the smart pointer does not point anymore to the object. but the object still exists
+		- reset: would call delete on the pointer u can use the smart pointer to point to something else 
+
+	- shared pointer:
+		- auto shared = std::make_shared<class>()
+		- it enables that the pointer can be copied
+		- if u want that the class return a pointer to itself use shared_from_this() where the class should inheritace from enable_shared_from_this<ClassName>
+
+	- nullptr:
+		- to refer the pointer is refering to nothing. it important to use nullptr not null. 
+
+- pair:
+	- it is used to create pair of data and then u can call them using first and second. 
+	- ex:
+		- pair<int,Foo> p1 (42, t); 
+		- p1.first
+	- piecewise_construct:
+		- would unpack the data and create the first element from the unpacked data of the first element and the second element from the unpacked data of the second element 
+	- you can create pair without defining the type using std::make_pair
+		ex: 
+			- std::pair<int,char>(42,’@’)  -> std::make_pair(42,’@’)
+
+	- u can get the value of the pair using structure binding 
+	auto[x,c] = f( ) -> this function return two element which would be inserted in x , y
+
+- tuple:
+	- u can create tuple from different data type using std::make_tuple
+	- auto x = std::make_tuple(1,23,"S",vector<int>d);
+	- get<0> x;
+	- we can use to to return more than one element from a function
+	and use std::tie to put the return data inside a variables
+
+- std::optional<int> o:
+	- o.value_or(42)
+	- o.has_value()
+	- o.value()
+	. o.emplace(12)
+
+- std::any
+
+- bitset:
+	- it is a way to store bit set on a variable
+	- std::bitset<8> b1; -> [0,0,0,0,0,0,0,0]
+	- b1.count() -> number of 1 
+	- b1.any() -> at least one bit is 1
+	- b1.all() -> all bits are 1
+	- b1.none() -> all bits are 0
+	- b1.test(index) -> check the value of a certain bit 
+	- b1.flip(index) -> flip the bit
+	- set /reset 
+
+- chrono:
+	- it is used to create interval
+	- <chrono>
+	- to get the the clock right now
+		- std::chrono::high_resolution_clock::now()
+	- to get the duration between two time:
+		- std::chrono::duration<float> duration = time2 -time1;
+	- to create variable which has time value
+		- std::chrono::hours hald_day(12) -> create 12 hours
+	- or
+		- using namespace std::chrono_literals;
+			- auto half_day = 12h;
+	- to convert from time unit to another use casting
+	- ex:
+		- auto total_seconds = 12345s;
+		- auto m1 = std::chrono::floor<std::chrono::minutes>(total_seconds); -> 205 min
+	- 
+
+- enum class:
+	- it is a scoped enum which is always recommended to be used
+	if u want to convert from enum to integer we have to used static cast  int c1 = static_cast<int>(Codes::Failure)
+
+- pointer:
+	- &*:
+		- this way we pass pointer by reference meaning we can change what the pointer is pointing to inside the function
+
+- standard library:
+	- iterator:
+		- used to step through the elements of a collection of object
+		- it provides common interface which can be used to iterator the collection and get the element which you want
+
+	- algorithum:
+		- it is the operation which u can apply on the iterator.
+		- operation such as sort, search, etc ...
+
+	- container:
+		- it is where we store the data which the algorthium can use it 
+		- container such as vector, set, unorder set
+		- sequence container:
+			- array, vector, deque, list, forward_list
+		- assoctiative:
+			- set, map
+		- standard library store a copy in the container means the element which you store should be copable 
+		- sequence:
+			- vector:
+				- #include <vector>
+				- A vector stores copies of the objects
+				- vector<int> intVector(10, 100); // Creates vector of 10 ints with value 100
+				- coll.push_back(i); -> append copy of the element to the vector
+				- we can add reference to the vector using ref() on the object which we want to add 
+					ex:
+						- vector<reference_wrapper<string>> vec
+						- vec.push_back(ref(obj)) -> this store a reference to the obj 
+						or 
+						- vector<const reference_wrapper<string>> vec
+						- vec.pop_back(cref(obj)) -> this store a constant reference to the obj 
+				- vec.push_back() -> remove the last elemnt 
+				- coll.size() -> return the size
+				- at() -> return a the element at a specific index
+				- front() -> return the first element
+				- back() -> return the last element
+				- assign -> it is used to delete the old vector and assign the new value to the vector 
+				vec.assign({1})
+				- vectorOne.erase(iterator) -> would remove the element
+				- .clear -> clear the vector
+
+			- deque:
+				- #include <deque>
+				- push_front(); // insert at the front
+				- push()and emplace() -> add a new element to the tail of
+				- pop() -> remove the element at the head
+				- front() and back() return  references
+
+			- list:
+				- #include <list>
+				-	push_back -> add element to the end
+				- it is a double linked list 
+				- it does not provide random access we have to loop through the list to get the element
+				- .front() -> get the first element 
+				- .pop_frnot() -> remove the first element, it does not return the element which you removed 
+				- while (! coll.empty()) -> to loop via the list 
+		
+		- associative:
+			- set: 
+				- unique element
+				- #include <set>
+				- insert -> add the element
+
+			- map:
+				- #include <unordered_map>
+				- unordered_map<string,float> coll;
+				- coll["an arbitrary number"] = 4983.223;
+				- dataMap.insert({ 1, Data(4) });
+				- dataMap.emplace(1,2)
+				- it = dataMap.find(key) -> return it->second
+				- insert_or_assign() has a similar return type as insert(). However, if an element with the given key already exists, insert_or_assign() overwrites the old value with the new value
+				- dataMap.erase(1); ->erase the element with a key
+		- algo:
+			- auto minPos = min_element(vec.cbegin(),vec.cend()); 
+				- would get the less element in a container
+			- auto maxpos = max_element(coll.cbegin(),coll.cend());
+
+			- find():
+				- return iterator 
+				- ex:
+					- auto it = find(cbegin(myVector), endIt, num); -> it is iterator
+					- if (it == end(myVector)) -> not found
+					- return *it
+			
+			- find_if():
+				- it take callback function not a simple variable
+				- if the callback functon return true the find_if return the iterator otherwise it return the endIterator 
+				- ex:
+					- auto it = find_if(cbegin(myVector), cend(myVector), perfectScore);
+
+			- std::find_if_not:
+				- get the iterator which return false
+
+			- accumulate():
+				- double mult = accumulate(cbegin(nums), cend(nums), 1, product);
+				- takes the start point and takes the last result as the begining and the next element
+
+- file stream:	
+	- stream is a middle layer between source/sink and the program
+	- stream convert data to bytes and vice verse
+	- stream object is always passed by none constant reference 
+
+
+- template:
+	- it is a way to create meta programming language
+	- we can define the template in  the header file 
+	- if we using class template we declare method in header file, write the defination in cpp file and include declaration file. the code which uses the template has to include .cpp file
+	- default value of template:
+		- template <typename T, typename CONT = std::vector<T> > Stack
+		- to instaniate the template:
+			- Stack<int>
+			- if we want another type
+			- Stack<int, std::deque<int>> dStack
+	- typename:
+		- it is used when the type depends on the type inside the container
+			- typename T::SubType * ptr;
+			- here subType is defined inside T
+			- what we mean by type is typedef  or using ex:
+				- ex1: 
+					- typdef const int cint 
+				- ex2:
+					- using type = int;
+			- if we write in template -> template<typename = integer<T>> -> this would delete the tempalte if the template integer<T> is false
+	- member template:
+		- we can define a member template inside a template 
+		- template <typename T>
+			template <typename T2>
+			Stack<T>& Stack<T>::operator= (Stack<T2> const& op2)  
+
+	- vectpr specialization:
+		- template <typename T1, typename T2>
+		class Myclass{}
+
+		- partial specialization:
+		- ex1:
+			- template<typename T>
+			- class Myclass<T, int>{}
+		- ex2:
+			- template<typename T>
+			- class Myclass<T,T>{}
+
+		- full specialization:
+			- template<>
+			- class Myclass<int, int>{}
+
+	- template tempalte:
+		- template<template<typename T1, Typename T2>typename container >:
+			- here we define tempate which takes a template T1 and T2 and the name of the template is container, we dont have access to T1 or T2
+
+	- type_traits:
+		- it returns information about the type of the variables 
+		ex:
+			- std::if_floating_point<T>::value -> return true of false
+			- rank<>::value -> return the diamtenion of the array
+			- remove_const<const int>::type -> return int
+			- enable_if -> std::enable_if<std::is_integral<T>::value, int>::value
+ 
+- reference:
+	- int& ref:
+		- it is lvalue refernce which binds to lvalue
+	- int const & ref:
+		- that is const lvalue reference which binds to lvalue and rvalue reference
+	- int&& ref:
+		- that is rvalue reference binds only to rvalue
+	- auto&&, template<>:
+		- that is universal reference binds to both lvalue and rvalue with perfect forwarding
+		- if u pass rvalue reference to it(in template) and changed it is value, it would change the rvalue reference value.as rvalue reference would be changed to lvalue reference
+		- ex:
+			- int x = 1;
+			- auto&& rx = x;
+			- rx+=1 -> this make x = 6
+	- if we return be reference we get only the same variable if we assign it to a reference variable meaing:
+		int x = functionWhichReturnByReference -> x is a new member it is not the same variable which we return
+		int& y = functionWhichReturnByReference -> y is the same variable which we return from the function
+	- decltpye():
+		- return the type of a value it return wether it is reference or not
+		- auto never return type pointer or reference
+		ex:
+			- int x = 4;
+			- int&& r = 5;
+			- int& l = i
+			- decltype(x) -> int
+			- decltype(l) -> gives int&
+			- decltype(r) -> gives int&&
+			- decltype(()) -> this return always lvalue
+			- decltype(auto) -> it preserves the type so we can return reference from it
+
+- Threads:
+	- it is a way to provide mutli processing concept 
+	- std::thread nameofThread{function)}
+		- this would create a thread for you
+	- std::thread(&address of the method, address of the object, parameter) 
+		- this would call method inside the class
+		- if we want to send a reference we have to use ref(var) or cref(var)
+	- nameofThread.join()
+		- would waith for the thrad to finish 
+	- nameOfThread.detach()
+		- nameOfthread is a daemon and has connection with the main thread
+	- nameofThread.joinable()
+		- return true of false if u we can join on this thread
+	- nameOfid.get_id()
+		- this would return the id of the thread
+	- to read my id inside the thread
+		- std::this_thread::get_id()
+	- to sleep on thread:
+		- std::this_thread::sleep_for(2s)
+	- how to handle exception in thread use Modern C++ programming cookbook by marius 
+
+	- atomic varaible:
+		- we can pass variavble by reference to a function with is a part of thread and it would handle the race condition 
+	- mutex:
+		- #include<mutex>
+		- mutial exclusion
+		- myMutx.lock() -> not recommended
+			- try to get the lock and blocks until it obtain the lock.
+			- dont use this method as it requires manually calling unlock
+		- myMutx.try_lock():
+			- return immediately with true if they got the lock otherwies false
+		- myMutx.unlock():
+			- return the lock
+		- myMutx.try_lock_for(rel_time):
+			- if the time eclapsed it would return false
+
+		try_lock_until(abs_time):
+			- u specifiy the absolute time
+
+		- std::lock_guard<std::mutex> guard(myMutex) -> recommended way
+			- the unlock would happen when we leave the scope
+			- if exception happens it would be also released as the destructor would be called
+
+		- std::unique_guard<std::mutex> guard(myMutex)
+			- it gives the method unlock so we has the ability to unlock the lock when we want not only in the destructor like lock_guard
+
+		- we define mutex inside the class which has the resources and this way we make sure that the user of the class would use the mutx, remember the code which we used in python 
+			template <typename T>
+				struct container{
+				std::mutex mutex;
+				std::vector<T> data;};
+
+	- call_once:
+		- if u pass once_flag and a funtion this function would be called only one time and it does not matter how many other threads has tried to call it all of them would be blocked until it return 
+
+	- std::future:
+		- 
+
+	- conditional variables:
+		- the function which wpuld sleep acuire a mutex and then call a sleep on it 
+			- std::unique_lock lock(cv_mutex);
+			- mycondition.wait(cv_mutex)
+		- produce call notify to wake up the sleeped thread
+			- mycondition.notify()
+
+- namespace:
+	- if u want to make all the variable from the namespace avaliable
+		- using namespace std:
+	- if u want to make only one function avaliable
+		- using std::vector
+	- if u want to make namespace alias
+		- namespace x = std;
+	- if u want to make type shorter
+		- using Iterator = std::vector<std::string>::iterator;
+
+- asio:
+	- it is synchronous library
+	- it works with buffer which is address and size
+
+	- the application provide the memory and the handler thead
+	- io_context:
+		- it is the bridge to the OS
+	- io_context.run()
+		- it invokes completion handler
+		- it blocks untill the async function is finished
+	- io_service.post():
+		- add function to the queue and fire it.
+
+	- steady_timer:
+		- takes 
+
+	- to print timne:
+		- std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+        - std::cout <<  std::ctime(&x) <<" timer 1 \n"; 
+
+    serialization:
+    	- write an object as byte 
+    deseerialization:
+    	- get the byte as object
+
+    - anantomy:
+    	- io_conext:
+    		- conect to OS
+    	- io_object:
+    		- such as timer or socket with send the request to the io_context
+    	- run command:
+    		- we call run on io_context which would block till the request is finished and it would call the completion handler
+    	- completion handler:
+    		- it is a call back function which is invoked which the result of the asynchronous operation
+    	- if we use threads with the same io_context then the io_context would divide the work arbitery
+
+    	- strand:
+    		- make sure that the handler run sequentialy which are parts of the same strand
+
+    	- buffer:
+    		- it is a pointer and size tuple, if u want to pass vector as buffer we have to call .data() on the vector to give the raw memory to the asio
+
