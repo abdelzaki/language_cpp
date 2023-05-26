@@ -458,34 +458,12 @@
 		- using Iterator = std::vector<std::string>::iterator;
 
 - asio:
-	- 
 	- it is asynchronous library meaning the function return immedately but the result we get it later 
 	- it works with buffer which is address and size
-
 	- the application provide the memory and the handler thead
-	- io_context:
-		- it is the bridge to the OS
-	- io_context.run()
-		- it invokes completion handler
-		- it blocks untill the async function is finished
-	- io_service.post():
-		- add function to the queue and fire it.
-
-	- steady_timer:
-		- takes 
-
-	- to print timne:
-		- std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
-        - std::cout <<  std::ctime(&x) <<" timer 1 \n"; 
-
-    serialization:
-    	- write an object as byte 
-    deseerialization:
-    	- get the byte as object
-
-    - anantomy:
-    	- io_conext:
-    		- conect to OS
+	    - anantomy:
+    	- io_conext or ol_service(dupricated):
+    		- connect to OS
     	- io_object:
     		- such as timer or socket with send the request to the io_context
     	- run command:
@@ -499,4 +477,38 @@
 
     	- buffer:
     		- it is a pointer and size tuple, if u want to pass vector as buffer we have to call .data() on the vector to give the raw memory to the asio
+	- io_context:
+		- it is the bridge to the OS
+	- io_context.run()
+		- it invokes completion handler
+		- it blocks untill the async function is finished
+	- io_service.post():
+		- add function to the queue and fire it.
+
+	- steady_timer:
+		- takes call back function which would execute when the time is exceeded
+		- timerx.async_wait: it is the starting point for the timer to start counting 
+		- timerx.run: it blocks the thread till the asynchronouis operation is finished.
+				- we still can call run on another thread if we do not want to block the main thread
+	- to print time:
+		- std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+        - std::cout <<  std::ctime(&x) <<" timer 1 \n"; 
+	
+	- signal:
+		- it is something like function pointer but it has the advantage that we can connect moer than one function to it, and when we call the signal using (), the connected functions would be called in series
+		- boost::signals2::signal<void()> s :
+			- that is how we define a signal 
+			- it takes function pointer which takes no parameter that is why lambda function is a good choice here 
+			- ex:
+				- signal<void()> s;
+  				- s.connect([]{ std::cout << "Hello"; });
+				- s();
+		- s.disconnect_all_slots():
+			- would release the functions which are assicated with the signal
+    serialization:
+    	- write an object as byte 
+    deseerialization:
+    	- get the byte as object
+
+
 
